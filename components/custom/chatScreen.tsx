@@ -1,36 +1,21 @@
 'use client';
-
-import { axiosClient } from '@/app/_utils/axiosConfig';
-import { useState } from 'react';
+import { Chat, useChatStore } from '@/store/useChatStore';
+import ChatBubble from './chatBubble';
 
 export default function ChatScreen() {
-  const [prompt, setPrompt] = useState('');
-  const [response, setResponse] = useState<object | null>(null);
-
-  const sendHandler = async (prompt: string) => {
-    const response = await axiosClient.post(`/chat/api`, { prompt });
-    console.log(response.data);
-    return response.data;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const response = await sendHandler(prompt);
-    setResponse(response);
-    setPrompt('');
-  };
+  const { conversation } = useChatStore();
   return (
     <div>
-      <div>screen</div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-        />
-        <button type="submit">Send</button>
-        <p>{JSON.stringify(response)}</p>
-      </form>
+      {conversation.map((chat: Chat) =>
+        chat.response === 'Thinking...' ? (
+          <div key={chat.id} className="text-gray-500">
+            {chat.prompt}
+            <span className="animate-pulse">...</span>
+          </div>
+        ) : (
+          <ChatBubble key={chat.id} chat={chat} />
+        ),
+      )}
     </div>
   );
 }

@@ -8,9 +8,7 @@ export async function GET() {
 }
 
 async function send_message(message: string) {
-  const genAi = new GoogleGenerativeAI(
-    'AIzaSyD6F5M1SaZfss0Xe2CcDs3F27ihJiGY5M4',
-  );
+  const genAi = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
   const model = genAi.getGenerativeModel({
     model: 'gemini-2.0-flash-lite-preview-02-05',
     generationConfig: {
@@ -21,12 +19,12 @@ async function send_message(message: string) {
       responseMimeType: 'application/json',
     },
     systemInstruction:
-      "You're a helpful assistant, and you're here to help me with my tasks.provide a detailed response to the following prompt.",
+      "You're a helpful assistant, and you're here to help me with my tasks.provide a detailed response to the following prompt. respond all your answers using markdown.",
   });
   const chat = model.startChat({});
   try {
     const { response } = await chat.sendMessage(message);
-    return response;
+    return response.text();
   } catch (error) {
     return error;
   }
