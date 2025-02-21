@@ -1,47 +1,66 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
-export type Chat = {
+type ResponseSchema = {
+  status: string;
+  message: string;
+  data: {
+    items: {
+      name: string;
+      description: string;
+    }[];
+    suggestions: string[];
+    citations: string[];
+  };
+};
+
+export type ResponseType = ResponseSchema | null;
+
+export type ChatType = {
   id: string;
   prompt: string;
-  response: string;
+  response: ResponseType;
   timestamp: string;
 };
 
-type Conversation = {
+export type ConversationType = {
   id: string;
-  chats: Chat[];
+  chats: ChatType[];
 };
 
 type ChatStoreType = {
-  conversation: Chat[];
-  history: Conversation[];
-  addChat: (chat: Chat) => void;
-  addConversation: (conversation: Conversation) => void;
-  setHistory: (history: Conversation[]) => void;
-  updateLastResponse: (response: string) => void;
+  conversation: ConversationType;
+  history: ConversationType[];
+  addChat: (chat: ChatType) => void;
+  addConversation: (conversation: ConversationType) => void;
+  setHistory: (history: ConversationType[]) => void;
+  updateLastResponse: (response: ResponseType) => void;
 };
 
 export const useChatStore = create<ChatStoreType>()(
   immer<ChatStoreType>((set) => ({
-    conversation: [],
+    conversation: {
+      chats: [],
+      id: new Date().toISOString(),
+    },
     history: [],
-    addChat: (chat: Chat) => {
+    addChat: (chat: ChatType) => {
       set((state) => {
-        state.conversation.push(chat);
+        state.conversation.chats.push(chat);
       });
     },
-    updateLastResponse: (response: string) => {
+    updateLastResponse: (response: ResponseType) => {
       set((state) => {
-        state.conversation[state.conversation.length - 1].response = response;
+        state.conversation.chats[state.conversation.chats.length - 1].response =
+          response;
       });
     },
-    addConversation: (conversation: Conversation) => {
+    addConversation: (conversation: ConversationType) => {
       set((state) => {
         state.history.push(conversation);
       });
     },
-    setHistory: (history: Conversation[]) => {
+    setHistory: (history: ConversationType[]) => {
       set((state) => {
         state.history = history;
       });

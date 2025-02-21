@@ -1,21 +1,14 @@
 'use client';
-import { Chat, useChatStore } from '@/store/useChatStore';
+import { ChatType, useChatStore } from '@/store/useChatStore';
 import ChatBubble from './chatBubble';
 
 export default function ChatScreen() {
   const { conversation } = useChatStore();
   return (
-    <div>
-      {conversation.map((chat: Chat) =>
-        chat.response === 'Thinking...' ? (
-          <div key={chat.id} className="text-gray-500">
-            {chat.prompt}
-            <span className="animate-pulse">...</span>
-          </div>
-        ) : (
-          <ChatBubble key={chat.id} chat={chat} />
-        ),
-      )}
+    <div className="w-full md:w-3/5 p-4 mx-auto shadow-sm min-h-screen overflow-y-auto flex flex-col gap-4">
+      {conversation.chats.map((chat: ChatType) => (
+        <ChatBubble key={chat.id} chat={chat} />
+      ))}
     </div>
   );
 }

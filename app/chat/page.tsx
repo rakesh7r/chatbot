@@ -9,8 +9,8 @@ export default function Page({ params }: Props) {
   const { chatId } = params;
 
   return (
-    <>
+    <div className="overflow-auto  h-[80vh]">
       <ChatScreen />
-    </>
+    </div>
   );
 }
