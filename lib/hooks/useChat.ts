@@ -8,6 +8,7 @@ type UseChatType = {
   setChat: React.Dispatch<
     React.SetStateAction<{ prompt: string; response: ResponseType }>
   >;
+  handleSendChat: (prompt: string) => Promise<void>;
 };
 
 export function useChat(): UseChatType {
@@ -18,19 +19,22 @@ export function useChat(): UseChatType {
   const [chat, setChat] = useState(initChatState);
   const { addChat, updateLastResponse, conversation } = useChatStore();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSendChat = async (prompt: string) => {
     addChat({
-      ...chat,
-      prompt: chat.prompt,
+      prompt: prompt,
       response: null,
       id: Date.now().toString(),
       timestamp: new Date().toISOString(),
     });
-    const response = await sendChat(chat.prompt, conversation);
+    const response = await sendChat(prompt, conversation);
     setChat((prevState) => ({ ...prevState, response }));
     updateLastResponse(response);
   };
 
-  return { handleSubmit, setChat };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSendChat(chat.prompt);
+  };
+
+  return { handleSubmit, setChat, handleSendChat };
 }
