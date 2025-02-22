@@ -18,7 +18,7 @@ export type ResponseType = ResponseSchema | null;
 
 export type ChatType = {
   id: string;
-  prompt: string;
+  prompt: string | null;
   response: ResponseType;
   timestamp: string;
 };
@@ -40,7 +40,22 @@ type ChatStoreType = {
 export const useChatStore = create<ChatStoreType>()(
   immer<ChatStoreType>((set) => ({
     conversation: {
-      chats: [],
+      chats: [
+        {
+          prompt: null,
+          response: {
+            status: 'success',
+            message: 'Hello, how can I help you today?',
+            data: {
+              items: [],
+              suggestions: [],
+              citations: [],
+            },
+          },
+          timestamp: new Date().toISOString(),
+          id: new Date().toISOString(),
+        },
+      ],
       id: new Date().toISOString(),
     },
     history: [],

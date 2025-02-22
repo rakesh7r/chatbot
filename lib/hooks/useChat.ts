@@ -9,6 +9,7 @@ type UseChatType = {
     React.SetStateAction<{ prompt: string; response: ResponseType }>
   >;
   handleSendChat: (prompt: string) => Promise<void>;
+  initChat: (prompt: string) => Promise<void>;
 };
 
 export function useChat(): UseChatType {
@@ -36,5 +37,10 @@ export function useChat(): UseChatType {
     handleSendChat(chat.prompt);
   };
 
-  return { handleSubmit, setChat, handleSendChat };
+  const initChat = async (prompt: string) => {
+    const response = await sendChat(prompt, conversation);
+    updateLastResponse(response);
+  };
+
+  return { handleSubmit, setChat, handleSendChat, initChat };
 }

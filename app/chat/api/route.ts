@@ -56,9 +56,12 @@ async function send_message(message: string, history: HistoryItem[]) {
     for code block: \`\`\`code block\`\`\`
     for quotes: > quoted text
 
+    suggestions are prompt suggestions for the user based on the previous chats.
+    return only best 3 suggestions and citations if any.
     All responses must strictly adhere to this structure. Only return JSON—no extra text or explanations.
   `,
   });
+
   const chat = model.startChat({
     history,
   });
@@ -74,9 +77,9 @@ function parseHistory(history: ChatType[]): HistoryItem[] {
   return history.reduce((acc: HistoryItem[], curr) => {
     if (curr.prompt) {
       acc.push({ role: 'user', parts: [{ text: curr.prompt }] });
-    }
-    if (curr.response) {
-      acc.push({ role: 'model', parts: [{ text: curr.response.message }] });
+      if (curr.response) {
+        acc.push({ role: 'model', parts: [{ text: curr.response.message }] });
+      }
     }
     return acc;
   }, []);

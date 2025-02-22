@@ -8,7 +8,7 @@ interface MarkdownPreviewProps {
 
 const MarkdownPreview: React.FC<MarkdownPreviewProps> = ({ content }) => {
   return (
-    <div className="bg-transparent">
+    <div className="bg-transparent overflow-auto">
       <ReactMarkdown>{content}</ReactMarkdown>
     </div>
   );
