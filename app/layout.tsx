@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Chatbot',
+  title: 'Cognito',
   description: 'Powered by Gemini',
 };
 

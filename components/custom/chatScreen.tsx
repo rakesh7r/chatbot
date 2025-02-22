@@ -16,7 +16,7 @@ export default function ChatScreen() {
   }, []);
 
   return (
-    <div className="w-full md:w-3/5 p-8 mx-auto shadow-sm min-h-screen overflow-y-auto flex flex-col gap-4">
+    <div className=" w-full md:w-3/5 p-8 mx-auto shadow-sm min-h-screen overflow-y-auto flex flex-col gap-4">
       {conversation.chats.map((chat: ChatType) => (
         <ChatBubble key={chat.id} chat={chat} />
       ))}

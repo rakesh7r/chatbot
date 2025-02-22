@@ -30,6 +30,11 @@ export function useChat(): UseChatType {
     const response = await sendChat(prompt, conversation);
     setChat((prevState) => ({ ...prevState, response }));
     updateLastResponse(response);
+    const chatscreen = document.querySelector('#chatscreen');
+    console.log(chatscreen);
+    if (chatscreen) {
+      chatscreen.scrollTop = chatscreen.scrollHeight;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
