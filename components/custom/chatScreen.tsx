@@ -11,7 +11,7 @@ export default function ChatScreen() {
 
   useEffect(() => {
     initChat(
-      `I'm initializing the chat, respond to user with, "Hello, how can I help you today?". just answer with suggestions in the respose schema with the trending topics. `,
+      `I'm initializing the chat, respond to user with, "Hello, how can I help you today?" and answer with some suggestions in the respose schema with the trending topics. `,
     );
   }, []);
 
