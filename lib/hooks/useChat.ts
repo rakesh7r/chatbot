@@ -21,15 +21,19 @@ export function useChat(): UseChatType {
   const { addChat, updateLastResponse, conversation } = useChatStore();
 
   const handleSendChat = async (prompt: string) => {
-    addChat({
-      prompt: prompt,
-      response: null,
-      id: Date.now().toString(),
-      timestamp: new Date().toISOString(),
-    });
-    const response = await sendChat(prompt, conversation);
-    setChat((prevState) => ({ ...prevState, response }));
-    updateLastResponse(response);
+    try {
+      addChat({
+        prompt: prompt,
+        response: null,
+        id: Date.now().toString(),
+        timestamp: new Date().toISOString(),
+      });
+      const response = await sendChat(prompt, conversation);
+      setChat((prevState) => ({ ...prevState, response: response }));
+      updateLastResponse(response);
+    } catch (error) {
+      console.log(error);
+    }
     const chatscreen = document.querySelector('#chatscreen');
     console.log(chatscreen);
     if (chatscreen) {
@@ -39,7 +43,7 @@ export function useChat(): UseChatType {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    handleSendChat(chat.prompt);
+    handleSendChat(chat?.prompt);
   };
 
   const initChat = async (prompt: string) => {
