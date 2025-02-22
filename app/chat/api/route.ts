@@ -1,12 +1,17 @@
+import { ChatType } from '@/store/useChatStore';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const body = Request;
-  return Response.json({ message: 'Hello, world!' });
+  return Response.json({ message: 'Chatbot app!' });
 }
 
-async function send_message(message: string) {
+type HistoryItem = {
+  role: string;
+  parts: [{ text: string }];
+};
+
+async function send_message(message: string, history: HistoryItem[]) {
   const genAi = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
   const model = genAi.getGenerativeModel({
     model: 'gemini-2.0-flash-lite-preview-02-05',
@@ -54,7 +59,9 @@ async function send_message(message: string) {
     All responses must strictly adhere to this structure. Only return JSON—no extra text or explanations.
   `,
   });
-  const chat = model.startChat({});
+  const chat = model.startChat({
+    history,
+  });
   try {
     const { response } = await chat.sendMessage(message);
     return response.text();
@@ -63,9 +70,22 @@ async function send_message(message: string) {
   }
 }
 
+function parseHistory(history: ChatType[]): HistoryItem[] {
+  return history.reduce((acc: HistoryItem[], curr) => {
+    if (curr.prompt) {
+      acc.push({ role: 'user', parts: [{ text: curr.prompt }] });
+    }
+    if (curr.response) {
+      acc.push({ role: 'model', parts: [{ text: curr.response.message }] });
+    }
+    return acc;
+  }, []);
+}
+
 export async function POST(req: Request) {
-  const { prompt } = await req.json();
-  return send_message(prompt)
+  const { prompt, history } = await req.json();
+  const parsedHistory = parseHistory(history);
+  return send_message(prompt, parsedHistory)
     .then((response: any) => JSON.parse(response))
     .then((response) => {
       return NextResponse.json(response, { status: 200 });
