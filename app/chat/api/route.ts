@@ -1,4 +1,4 @@
-import { ChatType } from '@/store/useChatStore';
+import { ChatType, ResponseSchema } from '@/store/useChatStore';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
 
@@ -86,7 +86,21 @@ export async function POST(req: Request) {
   const { prompt, history } = await req.json();
   const parsedHistory = parseHistory(history);
   return send_message(prompt, parsedHistory)
-    .then((response: any) => JSON.parse(response))
+    .then(
+      (response: unknown): ResponseSchema =>
+        response
+          ? JSON.parse(response?.toString())
+          : {
+              status: 'error',
+              prompt,
+              message: 'No response from the model',
+              data: {
+                items: [],
+                suggestions: [],
+                citations: [],
+              },
+            },
+    )
     .then((response) => {
       return NextResponse.json(response, { status: 200 });
     })

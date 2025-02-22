@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
-type ResponseSchema = {
+export type ResponseSchema = {
   status: string;
   message: string;
   data: {

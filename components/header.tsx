@@ -1,7 +1,3 @@
-import {
-  NavigationMenu,
-  NavigationMenuLink,
-} from '@/components/ui/navigation-menu';
 import ThemeSwitch from '@/components/custom/themeSwitch';
 
 export const Header = () => {
