@@ -29,13 +29,14 @@ export function useChat(): UseChatType {
         timestamp: new Date().toISOString(),
       });
       const response = await sendChat(prompt, conversation);
-      setChat((prevState) => ({ ...prevState, response: response }));
-      updateLastResponse(response);
+      if (response) {
+        setChat((prevState) => ({ ...prevState, response: response }));
+        updateLastResponse(response);
+      }
     } catch (error) {
       console.log(error);
     }
     const chatscreen = document.querySelector('#chatscreen');
-    console.log(chatscreen);
     if (chatscreen) {
       chatscreen.scrollTop = chatscreen.scrollHeight;
     }
