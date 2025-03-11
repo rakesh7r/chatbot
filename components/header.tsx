@@ -7,7 +7,7 @@ export const Header = () => {
   // const pathname = usePathname();
 
   return (
-    <div className="w-screen shadow-md p-[1rem] flex justify-between items-center sticky top-0 dark:border-b-2 dark:border-e-gray-600 z-10">
+    <div className="w-screen shadow-md p-[1rem] flex justify-between items-center sticky top-0 dark:border-b-2 dark:border-e-gray-600 dark:bg-black z-50">
       <Image src={Logo} alt="Cognito Assistant" height={50} />
       {/* {pathname !== '/' && <ThemeSwitch />} */}
     </div>
