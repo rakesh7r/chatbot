@@ -1,5 +1,5 @@
 'use client';
-import { ConversationType, ResponseType } from '@/store/useChatStore';
+import { ConversationType, ResponseType } from '@/store/chatSlice';
 import { axiosClient } from '@/utils/axiosConfig';
 
 export const sendChat = async (

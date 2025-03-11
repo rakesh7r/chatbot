@@ -66,7 +66,7 @@ export const chatSlice = createSlice({
     setHistory: (state, action: PayloadAction<ConversationType[]>) => {
       state.history = action.payload;
     },
-    updateLastResponse: (state, action: PayloadAction<ResponseSchema>) => {
+    updateLastResponse: (state, action: PayloadAction<ResponseType>) => {
       state.conversation.chats[state.conversation.chats.length - 1].response =
         action.payload;
     },
