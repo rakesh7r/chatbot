@@ -13,10 +13,12 @@ export type ResponseSchema = {
   };
 };
 
+export type ResponseType = ResponseSchema | null;
+
 export type ChatType = {
   id: string;
   prompt: string;
-  response: ResponseSchema;
+  response: ResponseType;
   timestamp: string;
 };
 

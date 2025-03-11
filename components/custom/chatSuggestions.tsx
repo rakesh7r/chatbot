@@ -1,9 +1,9 @@
 'use client';
 import { useChat } from '@/lib/hooks/useChat';
-import { useChatStore } from '@/store/useChatStore';
+import { useAppSelector } from '@/store/hooks';
 
 export const ChatSuggestions = () => {
-  const { conversation } = useChatStore();
+  const { conversation } = useAppSelector((state) => state.chat);
   const { handleSendChat } = useChat();
   return (
     <div className="w-full overflow-x-auto flex flex-col mt-5">

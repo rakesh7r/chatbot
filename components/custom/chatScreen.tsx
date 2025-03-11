@@ -1,12 +1,13 @@
 'use client';
-import { ChatType, useChatStore } from '@/store/useChatStore';
+import { ChatType } from '@/store/chatSlice';
 import ChatBubble from './chatBubble';
 import { ChatSuggestions } from './chatSuggestions';
 import { useEffect } from 'react';
 import { useChat } from '@/lib/hooks/useChat';
+import { useAppSelector } from '@/store/hooks';
 
 export default function ChatScreen() {
-  const { conversation } = useChatStore();
+  const { conversation } = useAppSelector((state) => state.chat);
   const { initChat } = useChat();
 
   useEffect(() => {
