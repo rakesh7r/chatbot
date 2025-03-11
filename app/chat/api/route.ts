@@ -1,4 +1,4 @@
-import { ChatType, ResponseSchema } from '@/store/useChatStore';
+import { ChatType, ResponseSchema } from '@/store/chatSlice';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
 

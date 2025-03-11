@@ -1,4 +1,4 @@
-import { ChatType } from '@/store/useChatStore';
+import { ChatType } from '@/store/chatSlice';
 import MarkdownPreview from './markdown';
 import { motion } from 'framer-motion';
 

@@ -1,7 +1,8 @@
 'use client';
-import { useChatStore, ResponseType } from '@/store/useChatStore';
+import { addChat, ResponseType, updateLastResponse } from '@/store/chatSlice';
 import { useState } from 'react';
 import { sendChat } from '../actions/chatActions';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 type UseChatType = {
   handleSubmit: (e: React.FormEvent) => Promise<void>;
@@ -18,24 +19,28 @@ export function useChat(): UseChatType {
     response: null,
   };
   const [chat, setChat] = useState(initChatState);
-  const { addChat, updateLastResponse, conversation } = useChatStore();
+  const chatStore = useAppSelector((state) => state.chat);
+  const dispatch = useAppDispatch();
 
   const handleSendChat = async (prompt: string) => {
     try {
-      addChat({
-        prompt: prompt,
-        response: null,
-        id: Date.now().toString(),
-        timestamp: new Date().toISOString(),
-      });
-      const response = await sendChat(prompt, conversation);
-      setChat((prevState) => ({ ...prevState, response: response }));
-      updateLastResponse(response);
+      dispatch(
+        addChat({
+          prompt: prompt,
+          response: null,
+          id: Date.now().toString(),
+          timestamp: new Date().toISOString(),
+        }),
+      );
+      const response = await sendChat(prompt, chatStore.conversation);
+      if (response) {
+        setChat((prevState) => ({ ...prevState, response: response }));
+        dispatch(updateLastResponse(response));
+      }
     } catch (error) {
       console.log(error);
     }
     const chatscreen = document.querySelector('#chatscreen');
-    console.log(chatscreen);
     if (chatscreen) {
       chatscreen.scrollTop = chatscreen.scrollHeight;
     }
@@ -47,8 +52,8 @@ export function useChat(): UseChatType {
   };
 
   const initChat = async (prompt: string) => {
-    const response = await sendChat(prompt, conversation);
-    updateLastResponse(response);
+    const response = await sendChat(prompt, chatStore.conversation);
+    dispatch(updateLastResponse(response));
   };
 
   return { handleSubmit, setChat, handleSendChat, initChat };
