@@ -17,7 +17,7 @@ export const ChatSuggestions = () => {
         ]?.response?.data.suggestions.map((suggestion, idx) => (
           <div
             key={idx}
-            className=" bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl w-max cursor-pointer"
+            className=" bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl w-max cursor-pointer min-w-44"
             onClick={() => {
               handleSendChat(suggestion);
             }}
